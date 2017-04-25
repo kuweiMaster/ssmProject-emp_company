@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 配置别名 如果配置了别名 在sql映射文件中就不用写对应的包名了~ 就可以直接对应的别名即可 -->
+	<typeAliases>
+		<typeAlias type="com.kuwei.dto.Company" alias="Company"/>
+		<typeAlias type="com.kuwei.dto.Emp" alias="Emp"/>
+	</typeAliases>
+
+	<!-- 配置数据源信息 --> 
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+				<dataSource type="POOLED">
+						<property name="driver" value="com.mysql.jdbc.Driver" />
+						<property name="url" value="jdbc:mysql://localhost:3306/emp?useUnicode=true&amp;characterEncoding=utf-8" />
+						<property name="username" value="root" />
+						<property name="password" value="root" />
+				</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/kuwei/dto/sql.xml"/>
+	</mappers>
+</configuration>

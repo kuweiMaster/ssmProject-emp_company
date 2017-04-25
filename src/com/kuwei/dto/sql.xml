@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kuwei.dao.EmpDao">
+	<!-- allList -->
+	<select id="allList" resultType="Emp">
+		select a.id,a.name,a.salary,GROUP_CONCAT(c.company SEPARATOR '-') as company,COUNT(company) as comNum from emp a left join emp_com b on a.id=b.eid left join company c on b.cid=c.id GROUP BY b.eid
+	</select>
+	
+	<!-- getEmpById -->
+	<select id="getEmpById" resultType="Emp" parameterType="hashmap">
+		select * from emp
+		<where>
+		 and id = #{id}
+		</where>
+	</select>
+	
+	<!-- companyList -->
+	<select id="companyList" resultType="Company">
+		select * from company
+	</select>
+	
+	<!-- companyListById -->
+	<select id="companyListById" resultType="int">
+		select cid from emp_com where eid=#{id};
+	</select>
+	
+	<!-- updateEmp set-if -->
+	<update id="updateEmp" parameterType="hashmap" >
+		update emp
+		<set>
+			<if test="emp.name!=null">
+			name=#{emp.name},
+			</if>
+			<if test="emp.salary!=null">
+			salary=#{emp.salary},
+			</if>
+		</set>
+		where id=#{emp.id}
+	</update>
+	
+	<!-- deleteMid -->
+	<delete id="deleteMid" parameterType="hashmap">
+		delete from emp_com where eid=#{id};
+	</delete>
+	
+	<!-- insertMid foreach -->
+	<insert id="insertMid" parameterType="hashmap" >
+		insert into emp_com(eid,cid) values
+		<foreach collection="ids" item="cid" separator=",">
+			(#{id},#{cid})
+		</foreach>
+	</insert>
+	
+	<!-- saveEmp -->
+	<insert id="saveEmp" parameterType="Emp" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into emp(name,salary) values(#{name},#{salary})
+	</insert>	
+	
+	<!-- deleteEmp -->
+	<delete id="deleteEmp" parameterType="hashmap">
+		delete from emp where id=#{id};
+	</delete>
+</mapper>
